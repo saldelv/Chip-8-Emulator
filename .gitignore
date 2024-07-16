@@ -2,3 +2,5 @@
 .vs/
 *.dll
 *.exe
+src/include/
+src/lib/
