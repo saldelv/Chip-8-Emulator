@@ -1,1 +1,1 @@
-# Game-Boy-Emulator
+# Chip-8-Emulator
