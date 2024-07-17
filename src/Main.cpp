@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
-int main(int argv, char** args) {
-
-    std::cout << "Hello" << std::endl;
+SDL_Window* create_window() {
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -23,7 +21,7 @@ int main(int argv, char** args) {
 
     if (NULL == window) {
         std::cout << "Could not create window: " << SDL_GetError() << std::endl;
-        return 1;
+        return NULL;
     }
 
     SDL_Event windowEvent;
@@ -38,6 +36,22 @@ int main(int argv, char** args) {
 
     SDL_DestroyWindow(window);
     SDL_Quit();
+
+    return window;
+}
+
+int main(int argv, char** args) {
+
+    std::cout << "Hello" << std::endl;
+
+    SDL_Window* window = create_window();
+
+    if (window == NULL) {
+        exit(0);
+    }
+
+    Chip8* chip = new Chip8();
+    
 
     return EXIT_SUCCESS;
 }

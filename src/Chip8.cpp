@@ -11,6 +11,9 @@
 
 Chip8::Chip8()
 {
+    for (int i = 50; i < 80 + 50; i++) {
+        Memory[i] = font[i-50];
+    }
 }
 
 void Chip8::cycle()
@@ -275,6 +278,10 @@ void Chip8::cycle()
                         V[i] = Memory[I_Index];
                         I_Index++; 
                     }
+                    break;
+                }
+                default:
+                {
                     break;
                 }
             }
