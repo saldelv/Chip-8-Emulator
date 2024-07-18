@@ -11,6 +11,26 @@
 
 Chip8::Chip8()
 {
+    ProgramCounter = 0x200;
+    I = 0;
+    StackPointer = 0;
+    SoundTimer, DelayTimer = 0;
+
+    for (int i = 0; i < 4096; i++) {
+        Memory[i] = 0;
+    }
+    for (int i = 0; i < 16; i++) {
+        V[i] = 0;
+    }
+    for (int i = 0; i < 16; i++) {
+        Stack[i] = 0;
+    }
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 32; j++) {
+            display[i][j] = 0;
+        }
+    }      
+
     for (int i = 50; i < 80 + 50; i++) {
         Memory[i] = font[i-50];
     }
@@ -18,7 +38,7 @@ Chip8::Chip8()
 
 void Chip8::cycle()
 {
-    int16_t opcode = (Memory[ProgramCounter] << 8) | Memory[ProgramCounter + 1];
+    int16_t opcode = (Memory[ProgramCounter] << 8) | Memory[ProgramCounter + 1]; // fetch
     ProgramCounter += 2;
 
     int16_t nnn = m_nnn(opcode);
@@ -28,7 +48,8 @@ void Chip8::cycle()
     uint8_t kk = m_low(opcode);
     uint8_t n = m_n(opcode);
 
-    switch (xh) // checks hex of first 4 bits
+    //decode and execute
+    switch (xh) // checks hex of first 4 bits 
     {
         case 0x0:
         {
@@ -36,7 +57,11 @@ void Chip8::cycle()
             {
                 case 0x00E0: // CLS
                 {
-                    // clear graphics display
+                    for (int i = 0; i < 64; i++) {
+                        for (int j = 0; j < 32; j++) {
+                            display[i][j] = 0;
+                        }
+                    }                    
                     break;
                 }
             }
@@ -197,7 +222,25 @@ void Chip8::cycle()
         }
         case 0xD: // DRW Vx, Vy, nibble
         {
-            //display sprites
+            V[F] = 0;
+            for (int i = 0; i < n; i++) {
+                uint8_t s = Memory[I + i]; // sprite from memory
+                int32_t row = (V[y] + i) % 32; // row value that wraps arround
+                for (int j = 0; j < 8; j++) {
+                    int32_t col = (V[x] + j) % 64; // col value that wraps around
+                    int32_t bit = (s & 0x80) >> 7; // most significant bit from the sprite to decide if the pixel should appear or not
+                    if (bit == 1) {
+                        if (display[col][row] == 1) {
+                            display[col][row] = 0;
+                        }
+                        else {
+                            display[col][row] = 1;
+                            V[F] = 1;
+                        }
+                    }
+                    s = s << 1; // shift to next bit of sprite
+                }
+            }
             break;
         }
         case 0xE:

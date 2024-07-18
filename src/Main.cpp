@@ -17,7 +17,7 @@ SDL_Window* create_window() {
     SDL_GetCurrentDisplayMode(0, &current);
 
 
-    SDL_Window *window = SDL_CreateWindow("Chip 8 Emulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_RENDERER_ACCELERATED);
+    SDL_Window *window = SDL_CreateWindow("Chip 8 Emulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 32, SDL_RENDERER_ACCELERATED);
 
     if (NULL == window) {
         std::cout << "Could not create window: " << SDL_GetError() << std::endl;
@@ -47,7 +47,7 @@ int main(int argv, char** args) {
     SDL_Window* window = create_window();
 
     if (window == NULL) {
-        exit(0);
+        return -1;
     }
 
     Chip8* chip = new Chip8();
