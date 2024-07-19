@@ -36,6 +36,24 @@ Chip8::Chip8()
     }
 }
 
+void Chip8::load_rom(char* rom_name)
+{
+    char* raw;
+
+    std::ifstream rom_file(rom_name, std::ios::in | std::ios::binary | std::ios::ate);
+    std::ifstream::pos_type rom_size = rom_file.tellg();
+
+    raw = new char[rom_size];
+
+    rom_file.seekg(0, std::ios::beg);
+    rom_file.read(raw, rom_size);
+    rom_file.close();
+
+    for (int i = 0; i < rom_size; i++) {
+        Memory[512 + i] = raw[i];
+    }
+}
+
 void Chip8::cycle()
 {
     int16_t opcode = (Memory[ProgramCounter] << 8) | Memory[ProgramCounter + 1]; // fetch

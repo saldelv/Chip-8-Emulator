@@ -15,7 +15,10 @@ int main(int argv, char** args) {
     }
 
     Chip8* chip = new Chip8();
-    
+
+    char* rom_name = args[1];
+    chip->load_rom(rom_name);
+
     while(true) {
         if (SDL_PollEvent(&graphics->event) && SDL_QUIT == graphics->event.type) {
             break;
