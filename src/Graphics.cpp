@@ -13,30 +13,37 @@ Graphics::Graphics()
     SDL_GetCurrentDisplayMode(0, &current);
 
 
-    SDL_Window *window = SDL_CreateWindow("Chip 8 Emulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 32, SDL_RENDERER_ACCELERATED);
+    //SDL_Window *window = SDL_CreateWindow("Chip 8 Emulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 32, SDL_RENDERER_ACCELERATED);
+
+    SDL_CreateWindowAndRenderer(64, 32, 0, &window, &renderer);
+    SDL_SetWindowTitle(window, "Chip 8 Emulator");
+    SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     if (NULL == window) {
         std::cout << "Could not create window: " << SDL_GetError() << std::endl;
     }
-
-    SDL_Event windowEvent;
-
-    while(true) {
-        if (SDL_PollEvent(&windowEvent)) {
-            if (SDL_QUIT == windowEvent.type) {
-                break;
-            }
-        }
-    }
 }
 
-void Graphics::update()
+void Graphics::update(uint32_t display[64][32])
 {
-    //update graphics
+    SDL_RenderClear(renderer);
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 32; j++) {
+            if (display[i][j] == 0) {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0.8);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0.8);
+            }
+            SDL_RenderDrawPoint(renderer, i, j);
+        }
+    }      
+    SDL_RenderPresent(renderer);
 }
 
 void Graphics::stopGraphics()
 {
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
