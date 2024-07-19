@@ -5,9 +5,6 @@
 #include <stdio.h>
 
 int main(int argv, char** args) {
-
-    std::cout << "Hello" << std::endl;
-
     Graphics* graphics = new Graphics();
 
     if (graphics->window == NULL) {
@@ -16,7 +13,8 @@ int main(int argv, char** args) {
 
     Chip8* chip = new Chip8();
 
-    char* rom_name = args[1];
+    //char* rom_name = args[1];
+    const char* rom_name =  "test_opcode.ch8";
     chip->load_rom(rom_name);
 
     while(true) {

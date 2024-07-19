@@ -36,7 +36,7 @@ Chip8::Chip8()
     }
 }
 
-void Chip8::load_rom(char* rom_name)
+void Chip8::load_rom(const char* rom_name)
 {
     char* raw;
 

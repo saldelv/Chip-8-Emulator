@@ -9,7 +9,7 @@ class Chip8
 {
 public:
     Chip8();
-    void load_rom(char* rom);
+    void load_rom(const char* rom);
     void cycle();
 
     uint8_t Memory[4096]; // 4096 bytes of RAM
