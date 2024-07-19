@@ -38,9 +38,16 @@ Chip8::Chip8()
 
 void Chip8::load_rom(const char* rom_name)
 {
+    
+
     char* raw;
 
     std::ifstream rom_file(rom_name, std::ios::in | std::ios::binary | std::ios::ate);
+    if (!rom_file) {
+        std::cout << "Invalid ROM name" << std::endl;
+        exit(0);
+    }
+
     std::ifstream::pos_type rom_size = rom_file.tellg();
 
     raw = new char[rom_size];
