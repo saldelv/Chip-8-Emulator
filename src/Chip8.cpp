@@ -295,7 +295,7 @@ void Chip8::cycle()
                 }
                 case 0x29: // LD F, Vx
                 {
-                    //uses sprites
+                    I = (V[x] *5) & 0xfff;  
                     break;
                 }
                 case 0x33: // LD B, Vx
