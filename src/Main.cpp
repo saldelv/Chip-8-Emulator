@@ -31,7 +31,8 @@ int main(int argv, char** args) {
             break;
         }
         else { 
-            chip->key = input->check_input();
+            chip->key = input->check_input(graphics->event);
+            std::cout << unsigned(chip->key) << std::endl;
             chip->cycle();
             graphics->update(chip->display);
         }

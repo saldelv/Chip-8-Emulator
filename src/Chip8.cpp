@@ -309,7 +309,7 @@ void Chip8::cycle()
                 case 0x0A: // LD Vx, K
                 {
                     // wait for key
-                    if (key == -1) {
+                    if (key == 0xff) {
                         ProgramCounter -= 2;
                     }
                     else {

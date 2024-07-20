@@ -8,9 +8,5 @@ class Input
 {
 public:
     Input();
-    int check_input();
-
-    bool keyboard[16];
-
-    SDL_Event event;
+    uint8_t check_input(SDL_Event event);
 };
