@@ -47,4 +47,6 @@ public:
     };
 
     uint32_t display[64][32];
+
+    uint8_t key;
 };

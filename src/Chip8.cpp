@@ -78,7 +78,7 @@ void Chip8::cycle()
     {
         case 0x0:
         {
-            switch (opcode) // checks opcode
+            switch (opcode) // checks opcode 
             {
                 case 0x00E0: // CLS
                 {
@@ -94,6 +94,10 @@ void Chip8::cycle()
                 {
                     ProgramCounter = Stack[StackPointer];
                     StackPointer--;
+                    break;
+                }
+                default:
+                {
                     break;
                 }
             break;
@@ -126,7 +130,7 @@ void Chip8::cycle()
         }
         case 0x5: // SE Vx, Vy
         {
-            if (V[x] != V[y]) {
+            if (V[x] == V[y]) {
                 ProgramCounter += 2;
             }
             break;
@@ -189,7 +193,7 @@ void Chip8::cycle()
                 }
                 case 0x6: // SHR Vx {, Vy}
                 {
-                    if (V[x] & 1 == 1) {
+                    if (V[x] & 0x01 == 1) {
                         V[F] = 1;
                     }
                     else {
@@ -274,12 +278,16 @@ void Chip8::cycle()
             {
                 case 0x9e: // SKP Vx
                 {
-                    //check keyboard
+                    if (key == V[x]) {
+                        ProgramCounter += 2;
+                    }
                     break;
                 }
                 case 0xA1: // SKNP Vx
                 {
-                    //check keyboard
+                    if (key != V[x]) {
+                        ProgramCounter += 2;
+                    }
                     break;
                 }
                 default:
@@ -301,6 +309,12 @@ void Chip8::cycle()
                 case 0x0A: // LD Vx, K
                 {
                     // wait for key
+                    if (key == -1) {
+                        ProgramCounter -= 2;
+                    }
+                    else {
+                        V[x] = key;
+                    }
                     break;
                 }
                 case 0x15: // LD DT, Vx
@@ -325,9 +339,9 @@ void Chip8::cycle()
                 }
                 case 0x33: // LD B, Vx
                 {
-                    V[I] = static_cast<int>(V[x]*1000) % 1000;
-                    V[I+1] = static_cast<int>(V[x]*100) % 100;
-                    V[I+2] = static_cast<int>(V[x]*10) % 10;
+                    V[I] = V[x] / 100;
+                    V[I+1] = (V[x] / 10) % 10;
+                    V[I+2] = (V[x] % 100) % 10;
                     break;
                 }
                 case 0x55: // LD [I], Vx

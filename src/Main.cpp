@@ -1,6 +1,7 @@
 #include "Main.h"
 #include "Chip8.h"
 #include "Graphics.h"
+#include "Input.h"
 #include <iostream>
 #include <stdio.h>
 
@@ -15,6 +16,8 @@ int main(int argv, char** args) {
         return -1;
     }
 
+    Input* input = new Input();
+
     Chip8* chip = new Chip8();
     chip->load_rom(rom_name);
 
@@ -28,6 +31,7 @@ int main(int argv, char** args) {
             break;
         }
         else { 
+            chip->key = input->check_input();
             chip->cycle();
             graphics->update(chip->display);
         }
