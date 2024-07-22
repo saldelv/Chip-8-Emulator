@@ -14,15 +14,15 @@ Chip8::Chip8()
     ProgramCounter = 0x200;
     I = 0;
     StackPointer = 0;
-    SoundTimer, DelayTimer = 0;
+    SoundTimer = 0;
+    DelayTimer = 0;
+    key = 0xff;
 
     for (int i = 0; i < 4096; i++) {
         Memory[i] = 0;
     }
     for (int i = 0; i < 16; i++) {
         V[i] = 0;
-    }
-    for (int i = 0; i < 16; i++) {
         Stack[i] = 0;
     }
     for (int i = 0; i < 64; i++) {
@@ -38,8 +38,6 @@ Chip8::Chip8()
 
 void Chip8::load_rom(const char* rom_name)
 {
-    
-
     char* raw;
 
     std::ifstream rom_file(rom_name, std::ios::in | std::ios::binary | std::ios::ate);
@@ -147,7 +145,7 @@ void Chip8::cycle()
         }
         case 0x8:
         {
-            switch (n) // checks hex of last 4 bits
+            switch (n) // checks last 4 bits
             {
                 case 0x0: // LD Vx, Vy
                 {
@@ -193,13 +191,13 @@ void Chip8::cycle()
                 }
                 case 0x6: // SHR Vx {, Vy}
                 {
-                    if (V[x] & 0x01 == 1) {
+                    if (V[x] & 0x1 == 1) {
                         V[F] = 1;
                     }
                     else {
                         V[F] = 0;
                     }
-                    V[x] = V[x] / 2;
+                    V[x] = V[x] >> 1;
                     break;
                 }
                 case 0x7: // SUBN Vx, Vy
@@ -221,7 +219,7 @@ void Chip8::cycle()
                     else {
                         V[F] = 0;
                     }
-                    V[x] = V[x] / 2;
+                    V[x] = V[x] << 1;
                     break;
                 }
             }
@@ -299,7 +297,7 @@ void Chip8::cycle()
         }
         case 0xF:
         {
-            switch(kk)
+            switch(kk) // checks last 8 bits
             {
                 case 0x07: // LD Vx, DT
                 {

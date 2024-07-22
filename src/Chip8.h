@@ -14,7 +14,7 @@ public:
 
     uint8_t Memory[4096]; // 4096 bytes of RAM
 
-    int16_t V[16]; // 16 general purpose Vx registers
+    uint8_t V[16]; // 16 general purpose Vx registers
 
     int16_t Stack[16]; // stores addresses the interpreter returns to after finishing a subroutine
     int16_t StackPointer; // points to top most level of stack
@@ -25,7 +25,7 @@ public:
 
     uint8_t DelayTimer, SoundTimer; // registers that decrement for timing
 
-    const int16_t F = 15; // 16th register index
+    int16_t F = 0xf; // 16th register index
 
     uint8_t font[80] = {
         0xF0, 0x90, 0x90, 0x90, 0xF0,
