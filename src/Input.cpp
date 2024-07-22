@@ -106,5 +106,5 @@ uint8_t Input::check_input(SDL_Event event)
             return 0xff;
         }
     }
-    return 0xff;
+    return 0xfe;
 }

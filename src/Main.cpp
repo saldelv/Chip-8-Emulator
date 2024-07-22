@@ -31,7 +31,10 @@ int main(int argv, char** args) {
             break;
         }
         else { 
-            chip->key = input->check_input(graphics->event);
+            uint8_t pressed = input->check_input(graphics->event);
+            if (pressed != 0xfe) {
+                chip->key = input->check_input(graphics->event);
+            }
             if (input->paused == false) {
                 chip->cycle();
                 graphics->update(chip->display);

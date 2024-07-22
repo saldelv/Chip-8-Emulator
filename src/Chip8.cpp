@@ -87,7 +87,6 @@ void Chip8::cycle()
                     }                    
                     break;
                 }
-            }
                 case 0x00EE: // RET
                 {
                     ProgramCounter = Stack[StackPointer];
@@ -98,6 +97,7 @@ void Chip8::cycle()
                 {
                     break;
                 }
+            }
             break;
         }
         case 0x1: // JP addr
@@ -180,7 +180,7 @@ void Chip8::cycle()
                 }
                 case 0x5: // SUB Vx, Vy
                 {
-                    if (V[x] > V[y]) {
+                    if (V[x] >= V[y]) {
                         V[F] = 1;
                     }
                     else {
@@ -202,7 +202,7 @@ void Chip8::cycle()
                 }
                 case 0x7: // SUBN Vx, Vy
                 {
-                    if (V[y] > V[x]) {
+                    if (V[y] >= V[x]) {
                         V[F] = 1;
                     }
                     else {
