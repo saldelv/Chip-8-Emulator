@@ -259,10 +259,10 @@ void Chip8::cycle()
                     if (bit == 1) {
                         if (display[col][row] == 1) {
                             display[col][row] = 0;
+                            V[F] = 1;
                         }
                         else {
                             display[col][row] = 1;
-                            V[F] = 1;
                         }
                     }
                     s = s << 1; // shift to next bit of sprite
