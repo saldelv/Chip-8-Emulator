@@ -1,12 +1,12 @@
 #include "Chip8.h"
 
 #define m_nnn(op) (op & 0x0fff) //lowest 12 bits, addr
-#define m_n(op) (op & 0x000f) //lowest 4 bits, nibble
+#define m_n(op) (op & 0x0f) //lowest 4 bits, nibble
 #define m_xh(op) ((op & 0xf000) >> 12) //upper 4 bits of high byte
 #define m_xl(op) ((op & 0x0f00) >> 8) //lower 4 bits of high byte, x variable
 #define m_yh(op) ((op & 0x00f0) >> 4) //upper 4 bits of low byte, y variable
 #define m_yl(op) (op & 0x000f) //lower 4 bits of low byte
-#define m_high(op) (op & 0xff00) //upper 8 bits, byte
+#define m_high(op) ((op & 0xff00) >> 8) //upper 8 bits, byte
 #define m_low(op) (op & 0x00ff) //lower 8 bits, byte, kk variable
 
 Chip8::Chip8()
@@ -339,9 +339,9 @@ void Chip8::cycle()
                 }
                 case 0x33: // LD B, Vx
                 {
-                    V[I] = V[x] / 100;
-                    V[I+1] = (V[x] / 10) % 10;
-                    V[I+2] = (V[x] % 10) % 10;
+                    Memory[I] = (V[x] / 100) % 10;
+                    Memory[I + 1] = (V[x] / 10) % 10;
+                    Memory[I + 2] = V[x] % 10;
                     break;
                 }
                 case 0x55: // LD [I], Vx
