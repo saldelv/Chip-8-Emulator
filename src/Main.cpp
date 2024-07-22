@@ -32,11 +32,10 @@ int main(int argv, char** args) {
         }
         else { 
             chip->key = input->check_input(graphics->event);
-            std::cout << unsigned(chip->key) << std::endl;
             chip->cycle();
             graphics->update(chip->display);
         }
-        SDL_Delay(1);
+        SDL_Delay(input->speed);
     }
 
     graphics->stopGraphics();

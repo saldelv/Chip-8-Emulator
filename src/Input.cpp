@@ -2,7 +2,7 @@
 
 Input::Input()
 {
-
+    speed = 1;
 }
 
 uint8_t Input::check_input(SDL_Event event)
@@ -77,6 +77,10 @@ uint8_t Input::check_input(SDL_Event event)
                 {
                     return 0xf;
                 }
+                case SDLK_SPACE:
+                {
+                    speed = 0.5;
+                }
                 default:
                 {
                     return 0xff;
@@ -85,6 +89,7 @@ uint8_t Input::check_input(SDL_Event event)
         }
         case SDL_KEYUP:
         {
+            speed = 1;
             return 0xff;
         }
     }

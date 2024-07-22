@@ -142,7 +142,7 @@ void Chip8::cycle()
         }
         case 0x7: // ADD Vx, byte
         {
-            V[x] = V[x] + kk;
+            V[x] += kk;
             break;
         }
         case 0x8:
@@ -341,7 +341,7 @@ void Chip8::cycle()
                 {
                     V[I] = V[x] / 100;
                     V[I+1] = (V[x] / 10) % 10;
-                    V[I+2] = (V[x] % 100) % 10;
+                    V[I+2] = (V[x] % 10) % 10;
                     break;
                 }
                 case 0x55: // LD [I], Vx
