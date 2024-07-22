@@ -11,4 +11,5 @@ public:
     uint8_t check_input(SDL_Event event);
 
     int speed;
+    bool paused;
 };

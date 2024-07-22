@@ -3,6 +3,7 @@
 Input::Input()
 {
     speed = 1;
+    paused = false;
 }
 
 uint8_t Input::check_input(SDL_Event event)
@@ -77,6 +78,11 @@ uint8_t Input::check_input(SDL_Event event)
                 {
                     return 0xf;
                 }
+                case SDLK_ESCAPE:
+                {
+                    paused = !paused;
+                    break;
+                }
                 case SDLK_SPACE:
                 {
                     speed = 0.5;
@@ -89,7 +95,14 @@ uint8_t Input::check_input(SDL_Event event)
         }
         case SDL_KEYUP:
         {
-            speed = 1;
+            switch(event.key.keysym.sym)
+            {
+                case SDLK_SPACE:
+                {
+                    speed = 1;
+                    break;
+                }
+            }
             return 0xff;
         }
     }

@@ -32,8 +32,10 @@ int main(int argv, char** args) {
         }
         else { 
             chip->key = input->check_input(graphics->event);
-            chip->cycle();
-            graphics->update(chip->display);
+            if (input->paused == false) {
+                chip->cycle();
+                graphics->update(chip->display);
+            }
         }
         SDL_Delay(input->speed);
     }
