@@ -15,9 +15,11 @@ Graphics::Graphics()
 
     //SDL_Window *window = SDL_CreateWindow("Chip 8 Emulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 32, SDL_RENDERER_ACCELERATED);
 
-    SDL_CreateWindowAndRenderer(128, 64, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(1024, 512, 0, &window, &renderer);
     SDL_SetWindowTitle(window, "Chip 8 Emulator");
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    SDL_SetWindowResizable(window, SDL_TRUE);
+    SDL_RenderSetLogicalSize(renderer, 64, 32);
 
     if (NULL == window) {
         std::cout << "Could not create window: " << SDL_GetError() << std::endl;
@@ -27,8 +29,6 @@ Graphics::Graphics()
 void Graphics::update(uint32_t display[64][32])
 {
     SDL_RenderClear(renderer);
-    int w = 0;
-    int h = 0;
     for (int i = 0; i < 64; i++) {
         for (int j = 0; j < 32; j++) {
             if (display[i][j] == 0) {
@@ -37,15 +37,8 @@ void Graphics::update(uint32_t display[64][32])
             else {
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0.8);
             }
-            SDL_RenderDrawPoint(renderer, w, h);
-            SDL_RenderDrawPoint(renderer, w + 1, h);
-            SDL_RenderDrawPoint(renderer, w, h + 1);
-            SDL_RenderDrawPoint(renderer, w + 1, h + 1);
-
-            h += 2;
+            SDL_RenderDrawPoint(renderer, i, j);
         }
-        h = 0;
-        w += 2;
     }      
     SDL_RenderPresent(renderer);
 }
