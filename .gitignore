@@ -2,5 +2,6 @@
 .vs/
 *.dll
 *.exe
+*.ch8
 src/include/
 src/lib/
