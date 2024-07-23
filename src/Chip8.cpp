@@ -78,18 +78,16 @@ void Chip8::cycle(bool debug)
                             display[i][j] = 0;
                         }
                     }    
-                    if (debug == true) {
-                        cout << "00E0" << endl;
-                    }                
+
+                    if (debug == true) cout << "00E0" << endl;                
                     break;
                 }
                 case 0x00EE: // RET
                 {
                     ProgramCounter = Stack[StackPointer];
                     StackPointer--;
-                    if (debug == true) {
-                        cout << "00EE" << endl;
-                    }    
+
+                    if (debug == true) cout << "00EE" << endl; 
                     break;
                 }
                 default:
@@ -102,9 +100,8 @@ void Chip8::cycle(bool debug)
         case 0x1: // JP addr
         {
             ProgramCounter = nnn;
-            if (debug == true) {
-                cout << "1nnn" << endl;
-            }
+
+            if (debug == true) cout << "1nnn" << endl;
             break;
         }
         case 0x2: // CALL addr
@@ -112,9 +109,8 @@ void Chip8::cycle(bool debug)
             StackPointer++;
             Stack[StackPointer] = ProgramCounter;
             ProgramCounter = nnn;
-            if (debug == true) {
-                cout << "2nnn" << endl;
-            }
+
+            if (debug == true) cout << "2nnn" << endl;
             break;
         }
         case 0x3: // SE Vx, byte
@@ -122,9 +118,8 @@ void Chip8::cycle(bool debug)
             if (V[x] == kk) {
                 ProgramCounter += 2;
             }
-            if (debug == true) {
-                cout << "3xkk" << endl;
-            }
+
+            if (debug == true)cout << "3xkk" << endl;
             break;
         }
         case 0x4: // SNE Vx, byte
@@ -132,9 +127,8 @@ void Chip8::cycle(bool debug)
             if (V[x] != kk) {
                 ProgramCounter += 2;
             }
-            if (debug == true) {
-                cout << "4xkk" << endl;
-            }
+
+            if (debug == true) cout << "4xkk" << endl;
             break;
         }
         case 0x5: // SE Vx, Vy
@@ -142,25 +136,22 @@ void Chip8::cycle(bool debug)
             if (V[x] == V[y]) {
                 ProgramCounter += 2;
             }
-            if (debug == true) {
-                cout << "5xy0" << endl;
-            }
+
+            if (debug == true) cout << "5xy0" << endl;
             break;
         }
         case 0x6: // LD Vx, byte
         {
             V[x] = kk;
-            if (debug == true) {
-                cout << "6xkk" << endl;
-            }
+
+            if (debug == true) cout << "6xkk" << endl;
             break;
         }
         case 0x7: // ADD Vx, byte
         {
             V[x] += kk;
-            if (debug == true) {
-                cout << "7xkk" << endl;
-            }
+
+            if (debug == true) cout << "7xkk" << endl;
             break;
         }
         case 0x8:
@@ -170,33 +161,29 @@ void Chip8::cycle(bool debug)
                 case 0x0: // LD Vx, Vy
                 {
                     V[x] = V[y];
-                    if (debug == true) {
-                        cout << "8xy0" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy0" << endl;
                     break;
                 }
                 case 0x1: // OR Vx, Vy
                 {
                     V[x] = V[x] | V[y];
-                    if (debug == true) {
-                        cout << "8xy1" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy1" << endl;
                     break;
                 }
                 case 0x2: // AND Vx, Vy
                 {
                     V[x] = V[x] & V[y];
-                    if (debug == true) {
-                        cout << "8xy2" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy2" << endl;
                     break;
                 }
                 case 0x3: // XOR Vx, Vy
                 {
                     V[x] = V[x] ^ V[y];
-                    if (debug == true) {
-                        cout << "8xy3" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy3" << endl;
                     break;
                 }
                 case 0x4: // ADD Vx, Vy
@@ -208,9 +195,8 @@ void Chip8::cycle(bool debug)
                         V[F] = 0;
                     }
                     V[x] = m_low(V[x] + V[y]);
-                    if (debug == true) {
-                        cout << "8xy4" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy4" << endl;
                     break;
                 }
                 case 0x5: // SUB Vx, Vy
@@ -222,9 +208,8 @@ void Chip8::cycle(bool debug)
                         V[F] = 0;
                     }
                     V[x] = V[x] - V[y];
-                    if (debug == true) {
-                        cout << "8xy5" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy5" << endl;
                     break;
                 }
                 case 0x6: // SHR Vx {, Vy}
@@ -236,9 +221,8 @@ void Chip8::cycle(bool debug)
                         V[F] = 0;
                     }
                     V[x] = V[x] >> 1;
-                    if (debug == true) {
-                        cout << "8xy6" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy6" << endl;
                     break;
                 }
                 case 0x7: // SUBN Vx, Vy
@@ -250,9 +234,8 @@ void Chip8::cycle(bool debug)
                         V[F] = 0;
                     }
                     V[x] = V[y] - V[x];
-                    if (debug == true) {
-                        cout << "8xy7" << endl;
-                    }
+
+                    if (debug == true) cout << "8xy7" << endl;
                     break;
                 }
                 case 0xE: // SHL Vx {, Vy}
@@ -264,9 +247,8 @@ void Chip8::cycle(bool debug)
                         V[F] = 0;
                     }
                     V[x] = V[x] << 1;
-                    if (debug == true) {
-                        cout << "8xyE" << endl;
-                    }
+
+                    if (debug == true) cout << "8xyE" << endl;
                     break;
                 }
             }
@@ -277,33 +259,29 @@ void Chip8::cycle(bool debug)
             if (V[x] != V[y]) {
                 ProgramCounter += 2;
             }
-            if (debug == true) {
-                cout << "9xy0" << endl;
-            }
+
+            if (debug == true) cout << "9xy0" << endl;
             break;
         }
         case 0xA: // LD I, addr
         {
             I = nnn;
-            if (debug == true) {
-                cout << "Annn" << endl;
-            }
+
+            if (debug == true) cout << "Annn" << endl;
             break;
         }
         case 0xB: // JP V0, addr
         {
             ProgramCounter = nnn + V[0];
-            if (debug == true) {
-                cout << "Bnnn" << endl;
-            }
+
+            if (debug == true) cout << "Bnnn" << endl;
             break;
         }
         case 0xC: // RND Vx, byte
         {
             V[x] = (rand() % 255) & kk;
-            if (debug == true) {
-                cout << "Cxkk" << endl;
-            }
+
+            if (debug == true) cout << "Cxkk" << endl;
             break;
         }
         case 0xD: // DRW Vx, Vy, nibble
@@ -327,9 +305,8 @@ void Chip8::cycle(bool debug)
                     s = s << 1; // shift to next bit of sprite
                 }
             }
-            if (debug == true) {
-                cout << "Dxyn" << endl;
-            }
+
+            if (debug == true) cout << "Dxyn" << endl;
             break;
         }
         case 0xE:
@@ -341,9 +318,8 @@ void Chip8::cycle(bool debug)
                     if (key == V[x]) {
                         ProgramCounter += 2;
                     }
-                    if (debug == true) {
-                        cout << "Ex9E" << endl;
-                    }
+
+                    if (debug == true) cout << "Ex9E" << endl;
                     break;
                 }
                 case 0xA1: // SKNP Vx
@@ -351,9 +327,8 @@ void Chip8::cycle(bool debug)
                     if (key != V[x]) {
                         ProgramCounter += 2;
                     }
-                    if (debug == true) {
-                        cout << "ExA1" << endl;
-                    }
+
+                    if (debug == true) cout << "ExA1" << endl;
                     break;
                 }
                 default:
@@ -370,9 +345,8 @@ void Chip8::cycle(bool debug)
                 case 0x07: // LD Vx, DT
                 {
                     V[x] = DelayTimer;
-                    if (debug == true) {
-                        cout << "Fx07" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx07" << endl;
                     break;
                 }
                 case 0x0A: // LD Vx, K
@@ -384,41 +358,36 @@ void Chip8::cycle(bool debug)
                     else {
                         V[x] = key;
                     }
-                    if (debug == true) {
-                        cout << "Fx0A" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx0A" << endl;
                     break;
                 }
                 case 0x15: // LD DT, Vx
                 {
                     DelayTimer = V[x];
-                    if (debug == true) {
-                        cout << "Fx15" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx15" << endl;
                     break;
                 }
                 case 0x18: // LD ST, Vx
                 {
                     SoundTimer = V[x];
-                    if (debug == true) {
-                        cout << "Fx18" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx18" << endl;
                     break;
                 }
                 case 0x1E: // ADD I, Vx
                 {
                     I = I + V[x];
-                    if (debug == true) {
-                        cout << "Fx1E" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx1E" << endl;
                     break;
                 }
                 case 0x29: // LD F, Vx
                 {
                     I = (V[x] *5) & 0xfff;  
-                    if (debug == true) {
-                        cout << "Fx29" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx29" << endl;
                     break;
                 }
                 case 0x33: // LD B, Vx
@@ -426,9 +395,8 @@ void Chip8::cycle(bool debug)
                     Memory[I] = (V[x] / 100) % 10;
                     Memory[I + 1] = (V[x] / 10) % 10;
                     Memory[I + 2] = V[x] % 10;
-                    if (debug == true) {
-                        cout << "Fx33" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx33" << endl;
                     break;
                 }
                 case 0x55: // LD [I], Vx
@@ -438,9 +406,8 @@ void Chip8::cycle(bool debug)
                         Memory[I_Index] = V[i];
                         I_Index++; 
                     }
-                    if (debug == true) {
-                        cout << "Fx55" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx55" << endl;
                     break;
                 }
                 case 0x65: // LD Vx, [I]
@@ -450,9 +417,8 @@ void Chip8::cycle(bool debug)
                         V[i] = Memory[I_Index];
                         I_Index++; 
                     }
-                    if (debug == true) {
-                        cout << "Fx65" << endl;
-                    }
+
+                    if (debug == true) cout << "Fx65" << endl;
                     break;
                 }
                 default:

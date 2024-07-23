@@ -17,8 +17,8 @@ int main(int argv, char** args) {
     }
 
     Input* input = new Input();
-
     Chip8* chip = new Chip8();
+
     chip->load_rom(rom_name);
 
     Graphics* graphics = new Graphics();
@@ -30,22 +30,20 @@ int main(int argv, char** args) {
         if (SDL_PollEvent(&graphics->event) && SDL_QUIT == graphics->event.type) {
             break;
         }
-        else { 
-            uint8_t pressed = input->check_input(graphics->event);
-            if (pressed <= 0xf || pressed == 0xff) {
-                chip->key = pressed;
-            }
-            if (input->paused == false) {
-                if (input->debug == true) {
-                    if (pressed == 0xfd) {
-                        chip->cycle(input->debug);
-                        graphics->update(chip->display);
-                    }
-                }
-                else {
+        uint8_t pressed = input->check_input(graphics->event);
+        if (pressed <= 0xf || pressed == 0xff) {
+            chip->key = pressed;
+        }
+        if (input->paused == false) {
+            if (input->debug == true) {
+                if (pressed == 0xfd) {
                     chip->cycle(input->debug);
                     graphics->update(chip->display);
                 }
+            }
+            else {
+                chip->cycle(input->debug);
+                graphics->update(chip->display);
             }
         }
         SDL_Delay(input->speed);
