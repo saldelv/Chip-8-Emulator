@@ -1,13 +1,6 @@
 #include "Chip8.h"
 
-#define m_nnn(op) (op & 0x0fff) //lowest 12 bits, addr
-#define m_n(op) (op & 0x0f) //lowest 4 bits, nibble
-#define m_xh(op) ((op & 0xf000) >> 12) //upper 4 bits of high byte
-#define m_xl(op) ((op & 0x0f00) >> 8) //lower 4 bits of high byte, x variable
-#define m_yh(op) ((op & 0x00f0) >> 4) //upper 4 bits of low byte, y variable
-#define m_yl(op) (op & 0x000f) //lower 4 bits of low byte
-#define m_high(op) ((op & 0xff00) >> 8) //upper 8 bits, byte
-#define m_low(op) (op & 0x00ff) //lower 8 bits, byte, kk variable
+using namespace std;
 
 Chip8::Chip8()
 {
@@ -40,17 +33,17 @@ void Chip8::load_rom(const char* rom_name)
 {
     char* raw;
 
-    std::ifstream rom_file(rom_name, std::ios::in | std::ios::binary | std::ios::ate);
+    ifstream rom_file(rom_name, ios::in | ios::binary | ios::ate);
     if (!rom_file) {
-        std::cout << "Invalid ROM name" << std::endl;
+        cout << "Invalid ROM name" << endl;
         exit(0);
     }
 
-    std::ifstream::pos_type rom_size = rom_file.tellg();
+    ifstream::pos_type rom_size = rom_file.tellg();
 
     raw = new char[rom_size];
 
-    rom_file.seekg(0, std::ios::beg);
+    rom_file.seekg(0, ios::beg);
     rom_file.read(raw, rom_size);
     rom_file.close();
 
@@ -59,7 +52,7 @@ void Chip8::load_rom(const char* rom_name)
     }
 }
 
-void Chip8::cycle()
+void Chip8::cycle(bool debug)
 {
     int16_t opcode = (Memory[ProgramCounter] << 8) | Memory[ProgramCounter + 1]; // fetch
     ProgramCounter += 2;
@@ -84,13 +77,19 @@ void Chip8::cycle()
                         for (int j = 0; j < 32; j++) {
                             display[i][j] = 0;
                         }
-                    }                    
+                    }    
+                    if (debug == true) {
+                        cout << "00E0" << endl;
+                    }                
                     break;
                 }
                 case 0x00EE: // RET
                 {
                     ProgramCounter = Stack[StackPointer];
                     StackPointer--;
+                    if (debug == true) {
+                        cout << "00EE" << endl;
+                    }    
                     break;
                 }
                 default:
@@ -103,6 +102,9 @@ void Chip8::cycle()
         case 0x1: // JP addr
         {
             ProgramCounter = nnn;
+            if (debug == true) {
+                cout << "1nnn" << endl;
+            }
             break;
         }
         case 0x2: // CALL addr
@@ -110,12 +112,18 @@ void Chip8::cycle()
             StackPointer++;
             Stack[StackPointer] = ProgramCounter;
             ProgramCounter = nnn;
+            if (debug == true) {
+                cout << "2nnn" << endl;
+            }
             break;
         }
         case 0x3: // SE Vx, byte
         {
             if (V[x] == kk) {
                 ProgramCounter += 2;
+            }
+            if (debug == true) {
+                cout << "3xkk" << endl;
             }
             break;
         }
@@ -124,6 +132,9 @@ void Chip8::cycle()
             if (V[x] != kk) {
                 ProgramCounter += 2;
             }
+            if (debug == true) {
+                cout << "4xkk" << endl;
+            }
             break;
         }
         case 0x5: // SE Vx, Vy
@@ -131,16 +142,25 @@ void Chip8::cycle()
             if (V[x] == V[y]) {
                 ProgramCounter += 2;
             }
+            if (debug == true) {
+                cout << "5xy0" << endl;
+            }
             break;
         }
         case 0x6: // LD Vx, byte
         {
             V[x] = kk;
+            if (debug == true) {
+                cout << "6xkk" << endl;
+            }
             break;
         }
         case 0x7: // ADD Vx, byte
         {
             V[x] += kk;
+            if (debug == true) {
+                cout << "7xkk" << endl;
+            }
             break;
         }
         case 0x8:
@@ -150,21 +170,33 @@ void Chip8::cycle()
                 case 0x0: // LD Vx, Vy
                 {
                     V[x] = V[y];
+                    if (debug == true) {
+                        cout << "8xy0" << endl;
+                    }
                     break;
                 }
                 case 0x1: // OR Vx, Vy
                 {
                     V[x] = V[x] | V[y];
+                    if (debug == true) {
+                        cout << "8xy1" << endl;
+                    }
                     break;
                 }
                 case 0x2: // AND Vx, Vy
                 {
                     V[x] = V[x] & V[y];
+                    if (debug == true) {
+                        cout << "8xy2" << endl;
+                    }
                     break;
                 }
                 case 0x3: // XOR Vx, Vy
                 {
                     V[x] = V[x] ^ V[y];
+                    if (debug == true) {
+                        cout << "8xy3" << endl;
+                    }
                     break;
                 }
                 case 0x4: // ADD Vx, Vy
@@ -176,6 +208,9 @@ void Chip8::cycle()
                         V[F] = 0;
                     }
                     V[x] = m_low(V[x] + V[y]);
+                    if (debug == true) {
+                        cout << "8xy4" << endl;
+                    }
                     break;
                 }
                 case 0x5: // SUB Vx, Vy
@@ -187,6 +222,9 @@ void Chip8::cycle()
                         V[F] = 0;
                     }
                     V[x] = V[x] - V[y];
+                    if (debug == true) {
+                        cout << "8xy5" << endl;
+                    }
                     break;
                 }
                 case 0x6: // SHR Vx {, Vy}
@@ -198,6 +236,9 @@ void Chip8::cycle()
                         V[F] = 0;
                     }
                     V[x] = V[x] >> 1;
+                    if (debug == true) {
+                        cout << "8xy6" << endl;
+                    }
                     break;
                 }
                 case 0x7: // SUBN Vx, Vy
@@ -209,6 +250,9 @@ void Chip8::cycle()
                         V[F] = 0;
                     }
                     V[x] = V[y] - V[x];
+                    if (debug == true) {
+                        cout << "8xy7" << endl;
+                    }
                     break;
                 }
                 case 0xE: // SHL Vx {, Vy}
@@ -220,6 +264,9 @@ void Chip8::cycle()
                         V[F] = 0;
                     }
                     V[x] = V[x] << 1;
+                    if (debug == true) {
+                        cout << "8xyE" << endl;
+                    }
                     break;
                 }
             }
@@ -230,21 +277,33 @@ void Chip8::cycle()
             if (V[x] != V[y]) {
                 ProgramCounter += 2;
             }
+            if (debug == true) {
+                cout << "9xy0" << endl;
+            }
             break;
         }
         case 0xA: // LD I, addr
         {
             I = nnn;
+            if (debug == true) {
+                cout << "Annn" << endl;
+            }
             break;
         }
         case 0xB: // JP V0, addr
         {
             ProgramCounter = nnn + V[0];
+            if (debug == true) {
+                cout << "Bnnn" << endl;
+            }
             break;
         }
         case 0xC: // RND Vx, byte
         {
             V[x] = (rand() % 255) & kk;
+            if (debug == true) {
+                cout << "Cxkk" << endl;
+            }
             break;
         }
         case 0xD: // DRW Vx, Vy, nibble
@@ -268,16 +327,22 @@ void Chip8::cycle()
                     s = s << 1; // shift to next bit of sprite
                 }
             }
+            if (debug == true) {
+                cout << "Dxyn" << endl;
+            }
             break;
         }
         case 0xE:
         {
             switch(kk)
             {
-                case 0x9e: // SKP Vx
+                case 0x9E: // SKP Vx
                 {
                     if (key == V[x]) {
                         ProgramCounter += 2;
+                    }
+                    if (debug == true) {
+                        cout << "Ex9E" << endl;
                     }
                     break;
                 }
@@ -285,6 +350,9 @@ void Chip8::cycle()
                 {
                     if (key != V[x]) {
                         ProgramCounter += 2;
+                    }
+                    if (debug == true) {
+                        cout << "ExA1" << endl;
                     }
                     break;
                 }
@@ -302,6 +370,9 @@ void Chip8::cycle()
                 case 0x07: // LD Vx, DT
                 {
                     V[x] = DelayTimer;
+                    if (debug == true) {
+                        cout << "Fx07" << endl;
+                    }
                     break;
                 }
                 case 0x0A: // LD Vx, K
@@ -313,26 +384,41 @@ void Chip8::cycle()
                     else {
                         V[x] = key;
                     }
+                    if (debug == true) {
+                        cout << "Fx0A" << endl;
+                    }
                     break;
                 }
                 case 0x15: // LD DT, Vx
                 {
                     DelayTimer = V[x];
+                    if (debug == true) {
+                        cout << "Fx15" << endl;
+                    }
                     break;
                 }
                 case 0x18: // LD ST, Vx
                 {
                     SoundTimer = V[x];
+                    if (debug == true) {
+                        cout << "Fx18" << endl;
+                    }
                     break;
                 }
                 case 0x1E: // ADD I, Vx
                 {
                     I = I + V[x];
+                    if (debug == true) {
+                        cout << "Fx1E" << endl;
+                    }
                     break;
                 }
                 case 0x29: // LD F, Vx
                 {
                     I = (V[x] *5) & 0xfff;  
+                    if (debug == true) {
+                        cout << "Fx29" << endl;
+                    }
                     break;
                 }
                 case 0x33: // LD B, Vx
@@ -340,6 +426,9 @@ void Chip8::cycle()
                     Memory[I] = (V[x] / 100) % 10;
                     Memory[I + 1] = (V[x] / 10) % 10;
                     Memory[I + 2] = V[x] % 10;
+                    if (debug == true) {
+                        cout << "Fx33" << endl;
+                    }
                     break;
                 }
                 case 0x55: // LD [I], Vx
@@ -349,6 +438,9 @@ void Chip8::cycle()
                         Memory[I_Index] = V[i];
                         I_Index++; 
                     }
+                    if (debug == true) {
+                        cout << "Fx55" << endl;
+                    }
                     break;
                 }
                 case 0x65: // LD Vx, [I]
@@ -357,6 +449,9 @@ void Chip8::cycle()
                     for (uint8_t i = 0; i <= x; i++) {
                         V[i] = Memory[I_Index];
                         I_Index++; 
+                    }
+                    if (debug == true) {
+                        cout << "Fx65" << endl;
                     }
                     break;
                 }

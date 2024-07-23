@@ -5,12 +5,21 @@
 #include <random>
 #include <fstream>
 
+#define m_nnn(op) (op & 0x0fff) //lowest 12 bits, addr
+#define m_n(op) (op & 0x0f) //lowest 4 bits, nibble
+#define m_xh(op) ((op & 0xf000) >> 12) //upper 4 bits of high byte
+#define m_xl(op) ((op & 0x0f00) >> 8) //lower 4 bits of high byte, x variable
+#define m_yh(op) ((op & 0x00f0) >> 4) //upper 4 bits of low byte, y variable
+#define m_yl(op) (op & 0x000f) //lower 4 bits of low byte
+#define m_high(op) ((op & 0xff00) >> 8) //upper 8 bits, byte
+#define m_low(op) (op & 0x00ff) //lower 8 bits, byte, kk variable
+
 class Chip8
 {
 public:
     Chip8();
     void load_rom(const char* rom);
-    void cycle();
+    void cycle(bool debug);
 
     uint8_t Memory[4096]; // 4096 bytes of RAM
 

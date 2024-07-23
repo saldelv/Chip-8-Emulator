@@ -38,12 +38,12 @@ int main(int argv, char** args) {
             if (input->paused == false) {
                 if (input->debug == true) {
                     if (pressed == 0xfd) {
-                        chip->cycle();
+                        chip->cycle(input->debug);
                         graphics->update(chip->display);
                     }
                 }
                 else {
-                    chip->cycle();
+                    chip->cycle(input->debug);
                     graphics->update(chip->display);
                 }
             }
