@@ -4,6 +4,7 @@ Input::Input()
 {
     speed = 1;
     paused = false;
+    debug = true;
 }
 
 uint8_t Input::check_input(SDL_Event event)
@@ -78,9 +79,19 @@ uint8_t Input::check_input(SDL_Event event)
                 {
                     return 0xf;
                 }
+                case SDLK_F6:
+                {
+                    return 0xfd;
+                }
                 case SDLK_ESCAPE:
                 {
                     paused = !paused;
+                    break;
+                }
+                case SDLK_F5:
+                {
+                    debug = !debug;
+                    std::cout << debug << std::endl;
                     break;
                 }
                 case SDLK_SPACE:

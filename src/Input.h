@@ -12,4 +12,5 @@ public:
 
     int speed;
     bool paused;
+    bool debug;
 };

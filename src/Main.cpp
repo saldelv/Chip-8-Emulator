@@ -32,12 +32,20 @@ int main(int argv, char** args) {
         }
         else { 
             uint8_t pressed = input->check_input(graphics->event);
-            if (pressed != 0xfe) {
-                chip->key = input->check_input(graphics->event);
+            if (pressed <= 0xf || pressed == 0xff) {
+                chip->key = pressed;
             }
             if (input->paused == false) {
-                chip->cycle();
-                graphics->update(chip->display);
+                if (input->debug == true) {
+                    if (pressed == 0xfd) {
+                        chip->cycle();
+                        graphics->update(chip->display);
+                    }
+                }
+                else {
+                    chip->cycle();
+                    graphics->update(chip->display);
+                }
             }
         }
         SDL_Delay(input->speed);
