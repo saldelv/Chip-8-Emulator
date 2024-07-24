@@ -91,7 +91,6 @@ uint8_t Input::check_input(SDL_Event event)
                 case SDLK_F5:
                 {
                     debug = !debug;
-                    std::cout << debug << std::endl;
                     break;
                 }
                 case SDLK_SPACE:

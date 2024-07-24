@@ -4,6 +4,7 @@
 #include <iostream>
 #include <random>
 #include <fstream>
+#include "Sound.h"
 
 #define m_nnn(op) (op & 0x0fff) //lowest 12 bits, addr
 #define m_n(op) (op & 0x0f) //lowest 4 bits, nibble
@@ -20,6 +21,7 @@ public:
     Chip8();
     void load_rom(const char* rom);
     void cycle(bool debug);
+    void decrement_timers();
 
     uint8_t Memory[4096]; // 4096 bytes of RAM
 
@@ -58,4 +60,6 @@ public:
     uint32_t display[64][32];
 
     uint8_t key;
+
+    Sound* sound;
 };
