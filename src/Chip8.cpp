@@ -170,6 +170,7 @@ void Chip8::cycle(bool debug)
                 case 0x1: // 8xy1 - OR Vx, Vy
                 {
                     V[x] = V[x] | V[y];
+                    V[F] = 0;
 
                     if (debug == true) cout << "8xy1" << endl;
                     break;
@@ -177,6 +178,7 @@ void Chip8::cycle(bool debug)
                 case 0x2: // 8xy2 - AND Vx, Vy
                 {
                     V[x] = V[x] & V[y];
+                    V[F] = 0;
 
                     if (debug == true) cout << "8xy2" << endl;
                     break;
@@ -184,71 +186,82 @@ void Chip8::cycle(bool debug)
                 case 0x3: // 8xy3 - XOR Vx, Vy
                 {
                     V[x] = V[x] ^ V[y];
+                    V[F] = 0;
 
                     if (debug == true) cout << "8xy3" << endl;
                     break;
                 }
                 case 0x4: // 8xy4 - ADD Vx, Vy
                 {
+                    bool carry;
                     if (V[x] + V[y] > 255) {
-                        V[F] = 1;
+                        carry = 1;
                     }
                     else {
-                        V[F] = 0;
+                        carry = 0;
                     }
                     V[x] = (V[x] + V[y]) & 0xff;
+                    V[F] = carry;
 
                     if (debug == true) cout << "8xy4" << endl;
                     break;
                 }
                 case 0x5: // 8xy5 - SUB Vx, Vy
                 {
+                    bool carry;
                     if (V[x] >= V[y]) {
-                        V[F] = 1;
+                        carry = 1;
                     }
                     else {
-                        V[F] = 0;
+                        carry = 0;
                     }
                     V[x] = V[x] - V[y];
+                    V[F] = carry;
 
                     if (debug == true) cout << "8xy5" << endl;
                     break;
                 }
                 case 0x6: // 8xy6 - SHR Vx {, Vy}
                 {
+                    bool carry;
                     if (V[x] & 0x1 == 1) {
-                        V[F] = 1;
+                        carry = 1;
                     }
                     else {
-                        V[F] = 0;
+                        carry = 0;
                     }
-                    V[x] = V[x] >> 1;
+                    V[x] = V[y] >> 1;
+                    V[F] = carry;
 
                     if (debug == true) cout << "8xy6" << endl;
                     break;
                 }
                 case 0x7: // 8xy7 - SUBN Vx, Vy
                 {
+                    bool carry;
                     if (V[y] >= V[x]) {
-                        V[F] = 1;
+                        carry = 1;
                     }
                     else {
-                        V[F] = 0;
+                        carry = 0;
                     }
                     V[x] = V[y] - V[x];
+                    V[F] = carry;
 
                     if (debug == true) cout << "8xy7" << endl;
                     break;
                 }
                 case 0xE: // 8xyE - SHL Vx {, Vy}
                 {
+                    bool carry;
                     if (floor(log2(V[x])) == 1) {
-                        V[F] = 1;
+                        carry = 1;
                     }
                     else {
-                        V[F] = 0;
+                        carry = 0;
                     }
-                    V[x] = V[x] << 1;
+                    V[x] = V[y] << 1;
+                    V[F] = carry;
 
                     if (debug == true) cout << "8xyE" << endl;
                     break;
@@ -403,10 +416,10 @@ void Chip8::cycle(bool debug)
                 }
                 case 0x55: // Fx55 - LD [I], Vx
                 {
-                    int16_t I_Index = I;
+                    //int16_t I_Index = I;
                     for (uint8_t i = 0; i <= x; i++) {
-                        Memory[I_Index] = V[i];
-                        I_Index++; 
+                        Memory[I] = V[i];
+                        I++; 
                     }
 
                     if (debug == true) cout << "Fx55" << endl;
@@ -414,10 +427,10 @@ void Chip8::cycle(bool debug)
                 }
                 case 0x65: // Fx65 - LD Vx, [I]
                 {
-                    int16_t I_Index = I;
+                    //int16_t I_Index = I;
                     for (uint8_t i = 0; i <= x; i++) {
-                        V[i] = Memory[I_Index];
-                        I_Index++; 
+                        V[i] = Memory[I];
+                        I++; 
                     }
 
                     if (debug == true) cout << "Fx65" << endl;
