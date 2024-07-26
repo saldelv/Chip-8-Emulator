@@ -5,7 +5,7 @@ Input::Input()
     defaultSpeed = 1000/600;
     speed = defaultSpeed;
     paused = false;
-    debug = true;
+    debug = false;
 }
 
 uint8_t Input::check_input(SDL_Event event)

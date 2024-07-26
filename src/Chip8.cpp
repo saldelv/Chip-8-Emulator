@@ -24,8 +24,8 @@ Chip8::Chip8()
         }
     }      
 
-    for (int i = 50; i < 80 + 50; i++) {
-        Memory[i] = font[i-50];
+    for (int i = 0; i < 80; i++) {
+        Memory[i] = font[i];
     }
 
     sound = new Sound();
@@ -254,7 +254,7 @@ void Chip8::cycle(bool debug)
                 case 0xE: // 8xyE - SHL Vx {, Vy}
                 {
                     bool carry;
-                    if (floor(log2(V[x])) == 1) {
+                    if ((V[x] & 0x80) >> 7 == 1) {
                         carry = 1;
                     }
                     else {
