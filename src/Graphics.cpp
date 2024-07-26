@@ -2,8 +2,6 @@
 
 Graphics::Graphics()
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
-
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
@@ -47,5 +45,4 @@ void Graphics::stopGraphics()
 {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_Quit();
 }

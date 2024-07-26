@@ -439,7 +439,11 @@ void Chip8::decrement_timers()
         DelayTimer--;
     }
     if (SoundTimer > 0) {
+        cout << unsigned(SoundTimer) << endl;
         sound->playSound();
         SoundTimer--;
+    }
+    else {
+        sound->stopSound();
     }
 }

@@ -6,6 +6,10 @@
 
 int main(int argv, char** args) {
 
+    // Initialize SDL
+    SDL_SetHint("SDL_AUDIODRIVER", "directsound");
+    SDL_Init(SDL_INIT_EVERYTHING);
+
     // check if argument is given
     const char* rom_name;
     if (args[1] != NULL) {
@@ -62,6 +66,8 @@ int main(int argv, char** args) {
     }
 
     // cleanup
+    chip->sound->closeSound();
     graphics->stopGraphics();
+    SDL_Quit();
     return EXIT_SUCCESS;
 }
