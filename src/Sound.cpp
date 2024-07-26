@@ -31,7 +31,6 @@ Sound::Sound()
 void Sound::playSound()
 {
     SDL_PauseAudioDevice(dev, 0);
-    SDL_Delay(10);
 }
 
 void Sound::stopSound()

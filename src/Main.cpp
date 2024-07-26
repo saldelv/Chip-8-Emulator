@@ -32,9 +32,14 @@ int main(int argv, char** args) {
         return -1;
     }
 
+    int cycles = 0;
     while(true) {
         // decrement sound and delay timerss at 60hz
-        chip->decrement_timers();
+        cycles++;
+        if (cycles == 10) {
+            chip->decrement_timers();
+            cycles = 0;
+        }
 
         // checking if window was closed
         if (SDL_PollEvent(&graphics->event) && SDL_QUIT == graphics->event.type) {
@@ -61,7 +66,7 @@ int main(int argv, char** args) {
                 graphics->update(chip->display);
             }
         }
-        // delay to control game speed
+        // delay to control game speed at 600hz (or double if sped up)
         SDL_Delay(input->speed);
     }
 

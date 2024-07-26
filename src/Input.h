@@ -10,6 +10,7 @@ public:
     Input();
     uint8_t check_input(SDL_Event event);
 
+    int defaultSpeed;
     int speed;
     bool paused;
     bool debug;

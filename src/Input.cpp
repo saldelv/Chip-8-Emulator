@@ -2,7 +2,8 @@
 
 Input::Input()
 {
-    speed = 1;
+    defaultSpeed = 1000/600;
+    speed = defaultSpeed;
     paused = false;
     debug = true;
 }
@@ -95,7 +96,7 @@ uint8_t Input::check_input(SDL_Event event)
                 }
                 case SDLK_SPACE:
                 {
-                    speed = 0.5;
+                    speed = defaultSpeed / 2;
                 }
                 default:
                 {
@@ -109,7 +110,7 @@ uint8_t Input::check_input(SDL_Event event)
             {
                 case SDLK_SPACE:
                 {
-                    speed = 1;
+                    speed = defaultSpeed;
                     break;
                 }
             }
