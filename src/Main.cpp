@@ -7,7 +7,7 @@
 int main(int argv, char** args) {
 
     // Initialize SDL
-    SDL_SetHint("SDL_AUDIODRIVER", "directsound");
+    SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
     SDL_Init(SDL_INIT_EVERYTHING);
 
     // check if argument is given
@@ -34,11 +34,13 @@ int main(int argv, char** args) {
 
     int cycles = 0;
     while(true) {
-        // decrement sound and delay timerss at 60hz
+        // decrement sound and delay timers and draw on screen at 60hz
         cycles++;
         if (cycles == 10) {
             chip->decrement_timers();
             cycles = 0;
+
+            graphics->update(chip->Display);
         }
 
         // checking if window was closed
@@ -52,18 +54,24 @@ int main(int argv, char** args) {
             chip->key = pressed;
         }
 
+        // checking if save state buttons were pressed
+        if (pressed == 0xfc) {
+            chip->save_state();
+        }
+        if (pressed == 0xfb) {
+            chip->load_state();
+        }
+
         // checking if the game is paused or if debug mode is activated
         if (input->paused == false) {
             if (input->debug == true) {
                 if (pressed == 0xfd) {
                     chip->cycle(input->debug);
-                    graphics->update(chip->display);
                 }
             }
             else {
                 // performs and instruction and updates the graphics
                 chip->cycle(input->debug);
-                graphics->update(chip->display);
             }
         }
         // delay to control game speed at 600hz (or double if sped up)
@@ -73,6 +81,8 @@ int main(int argv, char** args) {
     // cleanup
     chip->sound->closeSound();
     graphics->stopGraphics();
+    delete chip->sound;
+    delete input, graphics, chip;
     SDL_Quit();
     return EXIT_SUCCESS;
 }

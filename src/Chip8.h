@@ -22,6 +22,8 @@ public:
     void load_rom(const char* rom);
     void cycle(bool debug);
     void decrement_timers();
+    void save_state();
+    void load_state();
 
     uint8_t Memory[4096]; // 4096 bytes of RAM
 
@@ -57,9 +59,20 @@ public:
         0xF0, 0x80, 0xF0, 0x80, 0x80
     };
 
-    uint32_t display[64][32];
+    uint32_t Display[64][32]; // screen of pixels
+
+    // temp values for save state
+    uint8_t tempV[16]; 
+    int16_t tempStack[16]; 
+    int16_t tempStackPointer;
+    int16_t tempI; 
+    int16_t tempProgramCounter; 
+    uint8_t tempDelayTimer, tempSoundTimer;
+    uint32_t tempDisplay[64][32]; 
+
 
     uint8_t key;
 
     Sound* sound;
+    bool playing;
 };

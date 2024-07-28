@@ -24,12 +24,12 @@ Graphics::Graphics()
     }
 }
 
-void Graphics::update(uint32_t display[64][32])
+void Graphics::update(uint32_t Display[64][32])
 {
     SDL_RenderClear(renderer);
     for (int i = 0; i < 64; i++) {
         for (int j = 0; j < 32; j++) {
-            if (display[i][j] == 0) {
+            if (Display[i][j] == 0) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0.8);
             }
             else {

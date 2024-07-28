@@ -8,7 +8,7 @@ class Graphics
 {
 public:
     Graphics();
-    void update(uint32_t display[64][32]);
+    void update(uint32_t Display[64][32]);
     void stopGraphics();
 
     SDL_Window *window;

@@ -11,7 +11,11 @@ Chip8::Chip8()
     DelayTimer = 0;
     key = 0xff;
 
-    for (int i = 0; i < 4096; i++) {
+    for (int i = 0; i < 80; i++) {
+        Memory[i] = font[i];
+    }
+
+    for (int i = 80; i < 4096; i++) {
         Memory[i] = 0;
     }
     for (int i = 0; i < 16; i++) {
@@ -20,15 +24,12 @@ Chip8::Chip8()
     }
     for (int i = 0; i < 64; i++) {
         for (int j = 0; j < 32; j++) {
-            display[i][j] = 0;
+            Display[i][j] = 0;
         }
     }      
 
-    for (int i = 0; i < 80; i++) {
-        Memory[i] = font[i];
-    }
-
     sound = new Sound();
+    playing = false;
 }
 
 void Chip8::load_rom(const char* rom_name)
@@ -71,13 +72,13 @@ void Chip8::cycle(bool debug)
     {
         case 0x0:
         {
-            switch (opcode) // checks opcode 
+            switch (opcode & 0xfff) // checks opcode 
             {
                 case 0x00E0: // 00E0 - CLS
                 {
                     for (int i = 0; i < 64; i++) {
                         for (int j = 0; j < 32; j++) {
-                            display[i][j] = 0;
+                            Display[i][j] = 0;
                         }
                     }    
 
@@ -301,23 +302,26 @@ void Chip8::cycle(bool debug)
         }
         case 0xD: // Dxyn - DRW Vx, Vy, nibble
         {
+            uint8_t Vx = V[x];
+            uint8_t Vy = V[y];
             V[F] = 0;
+
             for (int i = 0; i < n; i++) {
-                uint8_t s = Memory[I + i]; // sprite from memory
-                int32_t row = (V[y] + i) % 32; // row value that wraps arround
+                uint8_t sprite = Memory[I + i]; // sprite from memory
+                int32_t row = (Vy + i) % 32; // row value that wraps arround
                 for (int j = 0; j < 8; j++) {
-                    int32_t col = (V[x] + j) % 64; // col value that wraps around
-                    int32_t bit = (s & 0x80) >> 7; // most significant bit from the sprite to decide if the pixel should appear or not
-                    if (bit == 1) {
-                        if (display[col][row] == 1) {
-                            display[col][row] = 0;
-                            V[F] = 1;
+                    int32_t col = (Vx + j) % 64; // col value that wraps around
+                    int32_t bit = (sprite & 0x80) >> 7; // most significant bit from the sprite to decide if the pixel should appear or not
+                    if (bit == 1) { // change pixel at column and row
+                        if (Display[col][row] == 1) {
+                            Display[col][row] = 0;
+                            V[F] = 1; // collision flag
                         }
                         else {
-                            display[col][row] = 1;
+                            Display[col][row] = 1;
                         }
                     }
-                    s = s << 1; // shift to next bit of sprite
+                    sprite = sprite << 1; // shift to next bit of sprite
                 }
             }
 
@@ -452,10 +456,52 @@ void Chip8::decrement_timers()
         DelayTimer--;
     }
     if (SoundTimer > 0) {
-        sound->playSound();
+        if (playing == false) {
+            sound->playSound();
+            playing = true;
+        }
         SoundTimer--;
     }
     else {
+        playing = false;
         sound->stopSound();
     }
+}
+
+void Chip8::save_state()
+{
+    for (int i = 0; i < 16; i++) {
+        tempV[i] = V[i]; 
+        tempStack[i] = Stack[i]; 
+    }
+    
+    tempStackPointer = StackPointer;
+    tempI = I; 
+    tempProgramCounter = ProgramCounter; 
+    tempDelayTimer = DelayTimer;
+    tempSoundTimer = SoundTimer;
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 32; j++) {
+            tempDisplay[i][j] = Display[i][j];
+        }
+    }      
+}
+
+void Chip8::load_state()
+{
+    for (int i = 0; i < 16; i++) {
+        V[i] = tempV[i]; 
+        Stack[i] = tempStack[i]; 
+    }
+    
+    StackPointer = tempStackPointer;
+    I = tempI; 
+    ProgramCounter = tempProgramCounter; 
+    DelayTimer = tempDelayTimer;
+    SoundTimer = tempSoundTimer;
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 32; j++) {
+            Display[i][j] = tempDisplay[i][j];
+        }
+    }      
 }

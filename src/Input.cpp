@@ -94,6 +94,14 @@ uint8_t Input::check_input(SDL_Event event)
                     debug = !debug;
                     break;
                 }
+                case SDLK_F1:
+                {
+                    return 0xfc;
+                }
+                case SDLK_F2:
+                {
+                    return 0xfb;
+                }
                 case SDLK_SPACE:
                 {
                     speed = defaultSpeed / 2;
