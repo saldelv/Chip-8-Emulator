@@ -2,7 +2,7 @@
 Emulator to run Chip-8 interpreted games made in C++ using SDL2
 
 # How to Use
-* Correctly download SDL and build the application, makefile is included but may need to be edited for different systems
+* Correctly download SDL and build the application or download the pre-built release. A Makefile is included but may need to be edited for different systems
 * Download any Chip-8 ROM, ROMs have the .ch8 extension
 * Run the built executable file in a terminal with the path to the ROM including the full ROM name as the only argument
 
