@@ -11,7 +11,7 @@ Emulator to run Chip-8 interpreted games made in C++ using SDL2
 1 2 3 4\
 Q W E R\
 A S D F\
-Z X C V\
+Z X C V
 * Escape: Pause the game
 * Space: Hold to double the speed of the game
 * F1: Save state
